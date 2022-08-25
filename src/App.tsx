@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./App.css";
-import { Pokemon } from "./redux/pokeSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { selectLoading, selectPokemons } from "./redux/pokeSelector";
-import { getPokemons } from "./redux/pokeAction";
+import {
+  selectLoading,
+  selectNextUrl,
+  selectPokemons,
+  selectViewDetail,
+} from "./redux/pokeSelector";
+import { getPokemons, nextPage } from "./redux/pokeAction";
 import PokemonCollection from "./component/PokemonCollection";
 
 const App: React.FC = () => {
@@ -11,8 +15,12 @@ const App: React.FC = () => {
 
   const loading = useSelector(selectLoading);
   const pokemons = useSelector(selectPokemons);
+  const nextUrl = useSelector(selectNextUrl);
+  const viewDetail = useSelector(selectViewDetail);
 
-  const [pokeList, setPokeList] = useState<Pokemon[]>(pokemons);
+  const loadMore = () => {
+    dispatch(nextPage(nextUrl));
+  };
 
   useEffect(() => {
     dispatch(getPokemons());
@@ -22,7 +30,14 @@ const App: React.FC = () => {
     <div className="App">
       <div className="container">
         <header className="pokemon-header">Pokemon</header>
-        <PokemonCollection pokemons={pokemons} />
+        <PokemonCollection pokemons={pokemons} viewDetail={viewDetail} />
+        {!viewDetail.isOpened && (
+          <div className="btn">
+            <button onClick={loadMore}>
+              {loading ? "Loading..." : "Load more"}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

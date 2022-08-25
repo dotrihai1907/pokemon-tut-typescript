@@ -11,3 +11,13 @@ export const selectPokemons = createSelector(
   [selectPokeReducer],
   (pokeSlice) => pokeSlice?.pokemons
 );
+
+export const selectNextUrl = createSelector(
+  [selectPokeReducer],
+  (pokeSlice) => pokeSlice?.nextUrl
+);
+
+export const selectViewDetail = createSelector(
+  [selectPokeReducer],
+  (pokeSlice) => pokeSlice?.viewDetail
+);
